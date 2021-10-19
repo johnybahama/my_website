@@ -7,17 +7,17 @@ disqusShortname: ''
 params:
   banner:
     buttonText: Get Started
-    subtitle: |-
+    subtitle: #|-
       A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
       AND RELEASED UNDER THE CREATIVE COMMONS.
-    title: Hi, my name is Forty
+    title: Hi, my name is Jonathan Antor and I am from the Bahamas.
   blog: {}
   contact:
     address:
       - city: London
         country: United Kingdom
-        street: Regent's Park, London 
-        title: NW1 4SA
+        street: Gloucester Place
+        title: Portfolio website for Jonathan Antor
     buttonClear: Clear
     buttonSend: Send message
     email:
@@ -25,7 +25,7 @@ params:
         title: Email
     enable: yes
     phone:
-      - phone: (000) 000-0000 x1234
+      - phone: +44(751766-8032)
         title: Phone
   custom_css: []
   custom_js: []
@@ -42,21 +42,21 @@ params:
         text: 'Design: '
         url: https://www.html5up.net
     social:
-      - icon: fa-twitter
-        label: Twitter
-        url: https://www.twitter.com
-      - icon: fa-facebook
-        label: Facebook
-        url: https://www.facebook.com
-      - icon: fa-instagram
-        label: Instagram
-        url: https://www.instagram.com
+      - icon: '#' fa-twitter
+        label: '#'Twitter
+        url: '#' https://www.twitter.com
+      - icon: '#' fa-facebook
+        label: '#' Facebook
+        url: '#' https://www.facebook.com
+      - icon: '#' fa-instagram
+        label: '#' Instagram
+        url: '#'https://www.instagram.com
       - icon: fa-github
         label: GitHub
         url: https://www.github.com
       - icon: fa-linkedin
         label: LinkedIn
-        url: https://www.linkedin.com/in/jonathan-antor/
+        url: https://www.linkedin.com
   image: ''
   name: Your name
   navigation:
