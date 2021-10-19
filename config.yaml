@@ -41,16 +41,16 @@ params:
       - alt: HTML5 UP
         text: 'Design: '
         url: https://www.html5up.net
-    social:
-      - icon: '#' fa-twitter
-        label: '#'Twitter
-        url: '#' https://www.twitter.com
-      - icon: '#' fa-facebook
-        label: '#' Facebook
-        url: '#' https://www.facebook.com
-      - icon: '#' fa-instagram
-        label: '#' Instagram
-        url: '#'https://www.instagram.com
+    social: 
+      #- icon:  fa-twitter
+      #  label: '#'Twitter
+       # url: '#' https://www.twitter.com
+     # - icon: '#' fa-facebook
+       # label: '#' Facebook
+       # url: '#' https://www.facebook.com
+     # - icon: '#' fa-instagram
+      #  label: '#' Instagram
+       # url: '#'https://www.instagram.com
       - icon: fa-github
         label: GitHub
         url: https://www.github.com
@@ -58,7 +58,7 @@ params:
         label: LinkedIn
         url: https://www.linkedin.com
   image: ''
-  name: Your name
+  name: Jonathan Antor
   navigation:
     button1:
       - name: Get Started
