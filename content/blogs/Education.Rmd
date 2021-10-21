@@ -1,0 +1,14 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:13-05:00"
+description: 
+draft: false
+image: Sammy.jpg
+keywords: ""
+slug: education
+title: Schooling
+---
+
+I currently attend the London Business School, and I am enrolled in the Masters in Financial Analysis program. The classes here are difficult but I am glad I am learning new things. I have a passion for finance and even studied it during my undergraduate degree. On May 20, 2021, I graduated from the University of Tampa with a 3.74 GPA. I placed in the top 15% of my class and admitted into the Business Honors Society. I came across many interesting subjects, but I believe my most challenging classes were Intermediate Macroeconomics,  and Financial Institutions. 

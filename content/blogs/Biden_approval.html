@@ -1,0 +1,118 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T21:28:43-05:00"
+description: ""
+draft: false
+image: Biden_1.jpg
+keywords: ""
+slug: BAM
+title: Biden Net Approval margin
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>This project was to see the net approval rating of the current USA President Joe Biden as he came to office January 21, 2021.</p>
+<p>First we must import approval polls data directly off fivethirtyeight website.</p>
+<pre class="r"><code>approval_polllist &lt;- read_csv(&#39;https://projects.fivethirtyeight.com/biden-approval-data/approval_polllist.csv&#39;) 
+
+glimpse(approval_polllist)</code></pre>
+<pre><code>## Rows: 1,972
+## Columns: 22
+## $ president           &lt;chr&gt; &quot;Joseph R. Biden Jr.&quot;, &quot;Joseph R. Biden Jr.&quot;, &quot;Jos~
+## $ subgroup            &lt;chr&gt; &quot;All polls&quot;, &quot;All polls&quot;, &quot;All polls&quot;, &quot;All polls&quot;~
+## $ modeldate           &lt;chr&gt; &quot;10/21/2021&quot;, &quot;10/21/2021&quot;, &quot;10/21/2021&quot;, &quot;10/21/2~
+## $ startdate           &lt;chr&gt; &quot;1/19/2021&quot;, &quot;1/19/2021&quot;, &quot;1/20/2021&quot;, &quot;1/20/2021&quot;~
+## $ enddate             &lt;chr&gt; &quot;1/21/2021&quot;, &quot;1/21/2021&quot;, &quot;1/22/2021&quot;, &quot;1/21/2021&quot;~
+## $ pollster            &lt;chr&gt; &quot;Rasmussen Reports/Pulse Opinion Research&quot;, &quot;Morni~
+## $ grade               &lt;chr&gt; &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B-&quot;, &quot;B+&quot;, &quot;B&quot;, &quot;B-&quot;, &quot;B+&quot;, &quot;~
+## $ samplesize          &lt;dbl&gt; 1500, 15000, 15000, 1993, 1115, 1516, 15000, 1200,~
+## $ population          &lt;chr&gt; &quot;lv&quot;, &quot;a&quot;, &quot;a&quot;, &quot;rv&quot;, &quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;rv&quot;, &quot;rv&quot;, &quot;~
+## $ weight              &lt;dbl&gt; 0.3382, 0.2594, 0.2333, 0.0930, 1.1014, 1.2454, 0.~
+## $ influence           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+## $ approve             &lt;dbl&gt; 48, 50, 51, 56, 55, 45, 52, 58, 63, 48, 55, 48, 53~
+## $ disapprove          &lt;dbl&gt; 45.0, 28.0, 28.0, 31.0, 32.0, 28.0, 29.0, 32.0, 37~
+## $ adjusted_approve    &lt;dbl&gt; 50.4, 48.5, 49.5, 54.5, 53.8, 46.4, 50.5, 56.8, 58~
+## $ adjusted_disapprove &lt;dbl&gt; 38.8, 31.2, 31.2, 34.2, 33.0, 28.5, 32.2, 33.1, 38~
+## $ multiversions       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+## $ tracking            &lt;lgl&gt; TRUE, TRUE, TRUE, NA, NA, NA, TRUE, NA, NA, TRUE, ~
+## $ url                 &lt;chr&gt; &quot;https://www.rasmussenreports.com/public_content/p~
+## $ poll_id             &lt;dbl&gt; 74247, 74272, 74273, 74246, 74248, 74327, 74274, 7~
+## $ question_id         &lt;dbl&gt; 139395, 139491, 139492, 139394, 139404, 139570, 13~
+## $ createddate         &lt;chr&gt; &quot;1/22/2021&quot;, &quot;1/28/2021&quot;, &quot;1/28/2021&quot;, &quot;1/22/2021&quot;~
+## $ timestamp           &lt;chr&gt; &quot;12:10:12 21 Oct 2021&quot;, &quot;12:10:12 21 Oct 2021&quot;, &quot;1~</code></pre>
+<p>We used <code>lubridate</code> to fix dates, as they are given as characters.</p>
+<pre class="r"><code>library(lubridate)
+
+updated_approval_polllist &lt;- approval_polllist %&gt;% 
+  mutate(modeldate = mdy(paste(as.character(modeldate))),
+         startdate = mdy(paste(as.character(startdate))),
+         enddate= mdy(paste(as.character(enddate))),
+         createddate= mdy(paste(as.character(createddate))),
+         week= isoweek(enddate))
+
+updated_approval_polllist</code></pre>
+<pre><code>## # A tibble: 1,972 x 23
+##    president subgroup modeldate  startdate  enddate    pollster grade samplesize
+##    &lt;chr&gt;     &lt;chr&gt;    &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt;
+##  1 Joseph R~ All pol~ 2021-10-21 2021-01-19 2021-01-21 Rasmuss~ B           1500
+##  2 Joseph R~ All pol~ 2021-10-21 2021-01-19 2021-01-21 Morning~ B          15000
+##  3 Joseph R~ All pol~ 2021-10-21 2021-01-20 2021-01-22 Morning~ B          15000
+##  4 Joseph R~ All pol~ 2021-10-21 2021-01-20 2021-01-21 Morning~ B           1993
+##  5 Joseph R~ All pol~ 2021-10-21 2021-01-20 2021-01-21 Ipsos    B-          1115
+##  6 Joseph R~ All pol~ 2021-10-21 2021-01-20 2021-01-21 YouGov   B+          1516
+##  7 Joseph R~ All pol~ 2021-10-21 2021-01-21 2021-01-23 Morning~ B          15000
+##  8 Joseph R~ All pol~ 2021-10-21 2021-01-21 2021-01-23 RMG Res~ B-          1200
+##  9 Joseph R~ All pol~ 2021-10-21 2021-01-21 2021-01-22 HarrisX  B+           941
+## 10 Joseph R~ All pol~ 2021-10-21 2021-01-20 2021-01-24 Rasmuss~ B           1500
+## # ... with 1,962 more rows, and 15 more variables: population &lt;chr&gt;,
+## #   weight &lt;dbl&gt;, influence &lt;dbl&gt;, approve &lt;dbl&gt;, disapprove &lt;dbl&gt;,
+## #   adjusted_approve &lt;dbl&gt;, adjusted_disapprove &lt;dbl&gt;, multiversions &lt;chr&gt;,
+## #   tracking &lt;lgl&gt;, url &lt;chr&gt;, poll_id &lt;dbl&gt;, question_id &lt;dbl&gt;,
+## #   createddate &lt;date&gt;, timestamp &lt;chr&gt;, week &lt;dbl&gt;</code></pre>
+<p>We now will get the net approval rate of each week along with some statistics like mean and median.</p>
+<p>We must get the points to plot on our graph.</p>
+<pre class="r"><code>new_approval_polllist &lt;- updated_approval_polllist  %&gt;% 
+  mutate(net_approval_rate = approve - disapprove)  %&gt;% 
+  group_by(week)  %&gt;% 
+  summarise(average_net_approval_rate = mean(net_approval_rate),
+            median_rate = median(net_approval_rate),
+            sd_rate = sd(net_approval_rate),
+            count = n(),
+            t_critical = qt(0.975, count - 1),
+            se_rate = sd_rate/sqrt(count),
+            margin_of_error = t_critical * se_rate,
+            CI_rate_low = average_net_approval_rate - margin_of_error,
+            CI_rate_high = average_net_approval_rate + margin_of_error) 
+
+head(new_approval_polllist)</code></pre>
+<pre><code>## # A tibble: 6 x 10
+##    week average_net_approval_rate median_rate sd_rate count t_critical se_rate
+##   &lt;dbl&gt;                     &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+## 1     3                      20.2        23      7.90    28       2.05    1.49
+## 2     4                      18.1        22      8.58    51       2.01    1.20
+## 3     5                      16.2        20      7.82    49       2.01    1.12
+## 4     6                      16.7        20.5    7.43    40       2.02    1.18
+## 5     7                      16.1        19      7.48    52       2.01    1.04
+## 6     8                      13.8        15.5    7.46    54       2.01    1.02
+## # ... with 3 more variables: margin_of_error &lt;dbl&gt;, CI_rate_low &lt;dbl&gt;,
+## #   CI_rate_high &lt;dbl&gt;</code></pre>
+<p>Here we are plotting the data so that we can visualize our results.</p>
+<p>We are able to see that in Joe Biden’s first few weeks he had a net approval rating of +20. As time went on, Joe Biden’s net approval ratings have plummeted to -10.</p>
+<pre class="r"><code>ggplot(new_approval_polllist, aes(x = week, y = average_net_approval_rate)) +
+  geom_point(color = &quot;orange&quot;, size = 0.6) +
+  geom_smooth(color = &quot;blue&quot;, size = 0.6, se = FALSE) +
+  geom_line(color = &quot;orange&quot;, size = 0.3) +
+  geom_line(aes(y = CI_rate_high), color = &quot;orange&quot;, size = 0.3) +
+  geom_line(aes(y = CI_rate_low), color = &quot;orange&quot;, size = 0.3) +
+  geom_line(aes(y = 0), color = &quot;orange&quot;, size = 1) +
+  scale_color_grey(aes(ymin = CI_rate_low, ymax = CI_rate_high)) +
+  geom_ribbon(aes(ymin = CI_rate_low, ymax = CI_rate_high), alpha = 1/10) +
+  theme_bw() +
+  labs( y = &quot;Average Approval Margin&quot;,
+        x = &quot;Week of the Year&quot;,
+        title = &quot;Estimating Approval Margin for Joe Biden&quot;,
+        subtitle = &quot;Weekly average of all polls&quot;) </code></pre>
+<p><img src="/blogs/Biden_approval_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>

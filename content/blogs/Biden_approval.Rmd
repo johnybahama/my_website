@@ -1,0 +1,104 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T21:28:43-05:00"
+description: ""
+draft: false
+image: Biden_1.jpg
+keywords: ""
+slug: BAM
+title: Biden Net Approval margin
+---
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+ 
+```{r load-libraries, include=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(here)
+library(skimr)
+library(janitor)
+library(httr)
+library(readxl)
+library(vroom)
+``` 
+
+This project was to see the net approval rating of the current USA President Joe Biden as he came to office January 21, 2021.  
+
+First we must import approval polls data directly off fivethirtyeight website.
+
+```{r}
+approval_polllist <- read_csv('https://projects.fivethirtyeight.com/biden-approval-data/approval_polllist.csv') 
+
+glimpse(approval_polllist)
+```
+ We used `lubridate` to fix dates, as they are given as characters.
+```{r}
+library(lubridate)
+
+updated_approval_polllist <- approval_polllist %>% 
+  mutate(modeldate = mdy(paste(as.character(modeldate))),
+         startdate = mdy(paste(as.character(startdate))),
+         enddate= mdy(paste(as.character(enddate))),
+         createddate= mdy(paste(as.character(createddate))),
+         week= isoweek(enddate))
+
+updated_approval_polllist
+```
+We now will get the net approval rate of each week along with some statistics like mean and median. 
+
+We must get the points to plot on our graph. 
+
+
+```{r}
+new_approval_polllist <- updated_approval_polllist  %>% 
+  mutate(net_approval_rate = approve - disapprove)  %>% 
+  group_by(week)  %>% 
+  summarise(average_net_approval_rate = mean(net_approval_rate),
+            median_rate = median(net_approval_rate),
+            sd_rate = sd(net_approval_rate),
+            count = n(),
+            t_critical = qt(0.975, count - 1),
+            se_rate = sd_rate/sqrt(count),
+            margin_of_error = t_critical * se_rate,
+            CI_rate_low = average_net_approval_rate - margin_of_error,
+            CI_rate_high = average_net_approval_rate + margin_of_error) 
+
+head(new_approval_polllist)
+```
+Here we are plotting the data so that we can visualize our results.
+
+We are able to see that in Joe Biden's first few weeks he had a net approval rating of +20. As time went on, Joe Biden's net approval ratings have plummeted to -10.
+
+```{r}
+ggplot(new_approval_polllist, aes(x = week, y = average_net_approval_rate)) +
+  geom_point(color = "orange", size = 0.6) +
+  geom_smooth(color = "blue", size = 0.6, se = FALSE) +
+  geom_line(color = "orange", size = 0.3) +
+  geom_line(aes(y = CI_rate_high), color = "orange", size = 0.3) +
+  geom_line(aes(y = CI_rate_low), color = "orange", size = 0.3) +
+  geom_line(aes(y = 0), color = "orange", size = 1) +
+  scale_color_grey(aes(ymin = CI_rate_low, ymax = CI_rate_high)) +
+  geom_ribbon(aes(ymin = CI_rate_low, ymax = CI_rate_high), alpha = 1/10) +
+  theme_bw() +
+  labs( y = "Average Approval Margin",
+        x = "Week of the Year",
+        title = "Estimating Approval Margin for Joe Biden",
+        subtitle = "Weekly average of all polls") 
+```

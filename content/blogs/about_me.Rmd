@@ -1,0 +1,18 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:09-05:00"
+description: Lorem Etiam Nullam
+draft: false
+image: Sailboat_1.jpg
+keywords: ""
+slug: about_me
+title: Life of Jonathan
+---
+
+My name is Jonathan Antor and I am from the beautiful islands of The Bahamas. I am the youngest of 3 children, but luckily I am the favorite child. Among other things, I love to listen to music, watch movies, and hangout with my family and friends. 
+
+I have played sports my whole life and even represented the Bahamas U-17 National Soccer Team in the World Cup Qualifiers. I was proud to represent my country and one day I would like to represent our Men's National team as well. 
+
+A fun fact about me is that I know how to play the piano and one day want to learn how to play "Flight of a Bumble-Bee"
